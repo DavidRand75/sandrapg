@@ -1,0 +1,23 @@
+/* General font size (double the normal size) */
+h4, h5 {
+    font-size: 2rem; /* Twice the normal size */
+}
+
+/* Custom card design with rounded corners and heavy shadow */
+.custom-card {
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Heavy shadow */
+    padding: 20px;
+}
+
+/* Custom button design */
+.custom-btn {
+    font-size: 1.5rem; /* Larger text */
+    border-radius: 30px; /* Rounded corners */
+    padding: 15px 20px;  /* Increase padding */
+}
+
+/* Extra margin for separation */
+.mt-2 {
+    margin-top: 15px;
+}

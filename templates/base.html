@@ -11,6 +11,8 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 
+    {% block styles %}{% endblock %}
+
     <!-- Extendable block for additional head content -->
     {% block head %}
     <!-- Placeholder for additional CSS or meta tags -->
