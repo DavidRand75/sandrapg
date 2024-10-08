@@ -1,0 +1,42 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>S3 Bucket Explorer</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Left Column: Buckets -->
+                <div class="col-md-4">
+                    <h5>Buckets</h5>
+                    <!-- Automatically populated bucket list -->
+                    <ul id="bucket-list" class="list-group mb-3">
+                        <!-- Example bucket (dynamically generated) -->
+                        <!-- <li class="list-group-item">my-bucket-name</li> -->
+                    </ul>
+                    <!-- Button to create new bucket -->
+                    <button class="btn btn-primary btn-block" id="create-bucket-btn">Create New Bucket</button>
+                    <!-- Button to delete selected bucket -->
+                    <button class="btn btn-danger btn-block mt-2" id="delete-bucket-btn" disabled>Delete Selected Bucket</button>
+                </div>
+
+                <!-- Right Column: Files/Objects -->
+                <div class="col-md-8">
+                    <h5>Files in Bucket: <span id="selected-bucket">None</span></h5>
+                    
+                    <!-- Automatically populated file list -->
+                    <ul id="file-list" class="list-group mb-3">
+                        <!-- Example file (dynamically generated) -->
+                        <!-- <li class="list-group-item">file1.txt</li> -->
+                    </ul>
+                    
+                    <!-- Upload File button -->
+                    <button class="btn btn-primary btn-block" id="upload-file-btn">Upload File</button>
+                    
+                    <!-- Download and Delete buttons for files -->
+                    <button class="btn btn-info btn-block mt-2" id="download-files-btn" disabled>Download Selected Files</button>
+                    <button class="btn btn-danger btn-block mt-2" id="delete-files-btn" disabled>Delete Selected Files</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

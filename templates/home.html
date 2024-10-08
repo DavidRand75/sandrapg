@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+    <h1>Welcome to the Home Page!</h1>
+    <p>This is the content specific to the home page.</p>
+
+    <!-- Include the S3 Explorer here -->
+    {% include '_s3_explorer.html' %}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }} <!-- Ensure base scripts are loaded -->
+{% endblock %}
