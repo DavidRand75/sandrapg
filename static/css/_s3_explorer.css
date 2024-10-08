@@ -6,15 +6,16 @@ h4, h5 {
 /* Custom card design with rounded corners and heavy shadow */
 .custom-card {
     border-radius: 20px; /* Rounded corners */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Heavy shadow */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Heavy shadow */
     padding: 20px;
 }
 
 /* Custom button design */
 .custom-btn {
     font-size: 1.5rem; /* Larger text */
-    border-radius: 30px; /* Rounded corners */
-    padding: 15px 20px;  /* Increase padding */
+    border-radius: 10px; /* Rounded corners */
+    padding: 2px 6px;  /* Increase padding */
+    width: 80%;
 }
 
 /* Extra margin for separation */
