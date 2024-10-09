@@ -142,6 +142,13 @@ class S3Manager {
             data: JSON.stringify({ bucket_name: bucketName }),
             success: (response) => {
                 console.log(`Bucket ${bucketName} deleted successfully.`);
+
+                // Reset the selected bucket after deletion
+                if (bucketName === this.selectedBucket) {
+                    this.selectedBucket = null;  // Clear the private selected bucket
+                }
+
+
                 this.listBuckets();  // Refresh the bucket list after deletion
             },
             error: (error) => {

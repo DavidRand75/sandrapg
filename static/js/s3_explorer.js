@@ -27,7 +27,7 @@ $(document).ready(function() {
             }
         } else {
             // Alert the user if no bucket is selected
-            alert("No bucket selected for deletion.");
+            console.log("No bucket selected for deletion.");
         }
     });
 
