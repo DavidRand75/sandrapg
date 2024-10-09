@@ -70,4 +70,46 @@ $(document).ready(function() {
         // Close the modal after the upload is triggered
         $('#uploadFilesModal').modal('hide');
     });
+
+    // Event listener to update the file list when files are selected
+    $('#file-input').change(function() {
+        const fileList = $('#file-input')[0].files;  // Get the selected files
+        const fileDisplayList = $('#selected-file-list');  // The UL element to display the files
+
+        // Clear the file display list before populating it with new selections
+        fileDisplayList.empty();
+
+        // Iterate over the selected files and display them in the list
+        for (let i = 0; i < fileList.length; i++) {
+            const fileName = fileList[i].name;
+            fileDisplayList.append(`<li class="list-group-item">${fileName}</li>`);
+        }
+    });
+
+    // Event listener for the upload button inside the modal
+    $('#confirm-upload-btn').click(() => {
+        const files = $('#file-input')[0].files;  // Get the selected files from the input
+
+        if (files.length === 0) {
+            alert("No files selected.");
+            return;
+        }
+
+        s3Manager.uploadFiles(files);  // Call the uploadFiles method from S3Manager
+
+        // Close the modal after the upload is triggered
+        $('#uploadFilesModal').modal('hide');
+
+        // Clear the selected file list and the file input after upload
+        $('#selected-file-list').empty();
+        $('#file-input').val(null);  // Clear the input field to reset the file selection
+    });
+    
+    // Clear file list when the modal is hidden (closed)
+    $('#uploadFilesModal').on('hidden.bs.modal', function () {
+        $('#selected-file-list').empty();  // Clear the file display list
+        $('#file-input').val(null);  // Clear the input field
+    });
+
+
   });
