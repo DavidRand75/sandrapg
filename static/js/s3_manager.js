@@ -79,7 +79,12 @@ class S3Manager {
 
                 if (response.files && response.files.length > 0) {
                     response.files.forEach(file => {
-                        $('#file-list').append(`<li class="list-group-item">${file}</li>`);
+                        $('#file-list').append(`
+                            <li class="list-group-item">
+                                <input type="checkbox" class="file-checkbox" value="${file}">
+                                ${file}
+                            </li>
+                        `);
                     });
                 } else {
                     $('#file-list').append(`<li class="list-group-item">No files found in bucket</li>`);
@@ -96,6 +101,17 @@ class S3Manager {
         return this.selectedBucket;
     }
 
+    // Function to get the selected files (checked checkboxes)
+    getSelectedFiles() {
+        let selectedFiles = [];
+
+        $('.file-checkbox:checked').each(function() {
+            selectedFiles.push($(this).val());  // Add file name to array
+        });
+
+        return selectedFiles;
+    }
+    
     // Method to create a new bucket
     createBucket(bucketName) {
         console.log(`Creating a new bucket: ${bucketName}`);

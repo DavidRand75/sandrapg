@@ -4,6 +4,12 @@ $(document).ready(function() {
     // Usage Example:
     const s3Manager = new S3Manager();
 
+    // Example usage: Call getSelectedFiles() to retrieve the checked files
+    $('#download-files-btn').click(function() {
+        const selectedFiles = s3Manager.getSelectedFiles();
+        console.log('Selected files:', selectedFiles);
+    });
+
     // Listing buckets
     s3Manager.listBuckets();
 
