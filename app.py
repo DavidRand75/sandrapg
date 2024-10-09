@@ -32,6 +32,18 @@ def list_buckets():
         return jsonify({'buckets': buckets}), 200
     else:
         return jsonify({'error': 'Unable to list buckets'}), 500
+    
+@app.route('/list_files', methods=['GET'])
+def list_files():
+    bucket_name = request.args.get('bucket')  # Get the bucket name from the query parameters
+    if bucket_name:
+        files = s3_manager.list_files(bucket_name)
+        if files:
+            return jsonify({'files': files}), 200
+        else:
+            return jsonify({'error': f'No files found in bucket: {bucket_name}'}), 404
+    else:
+        return jsonify({'error': 'Bucket name is required'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -34,3 +34,15 @@ class S3Manager:
             print(f"Error listing buckets: {e}")
             return None
 
+    # List files (objects) in a specific bucket
+    def list_files(self, bucket_name):
+        try:
+            response = self.s3.list_objects_v2(Bucket=bucket_name)
+            if 'Contents' in response:
+                file_names = [file['Key'] for file in response['Contents']]
+                return file_names
+            else:
+                return []  # Return an empty list if no files found
+        except Exception as e:
+            print(f"Error listing files in bucket {bucket_name}: {e}")
+            return None

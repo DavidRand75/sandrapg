@@ -20,7 +20,8 @@ class S3Manager {
             url: '/list_buckets',
             type: 'GET',
             success: (response) => {
-                console.log('Buckets:', response.buckets);
+                this.bucketList = response.buckets; 
+                //console.log('Buckets in prop:', this.bucketList);  // Log the filled bucket list
                 // Clear the bucket list before appending new items
                 $('#bucket-list').empty();
 
@@ -45,13 +46,48 @@ class S3Manager {
 
     // Set up event listener to track which bucket is selected
     setupRadioButtonListener() {
-        const _this = this;  // Store reference to 'this' so it's available inside event handler
-
-        // Listen for changes in the radio buttons
-        $('.bucket-radio').change(function() {
+        // Use an arrow function to maintain the context of 'this'
+        $('.bucket-radio').change((event) => {
             // Update the selectedBucket property with the selected bucket's value
-            _this.selectedBucket = $(this).val();
-            console.log('Selected bucket:', _this.selectedBucket);
+            this.selectedBucket = $(event.target).val();
+            console.log('Selected bucket:', this.selectedBucket);  // Log the selected bucket
+
+            // Now that we have the selected bucket, list its files
+            this.listFiles();
+        });
+    }
+
+
+    // Method to list files in the selected bucket
+    listFiles() {
+        const selectedBucket = this.selectedBucket;
+
+        if (!selectedBucket) {
+            console.error('No bucket selected');
+            return;
+        }
+
+        //console.log(`Listing files in bucket: ${this.selectedBucket}`);
+
+        $.ajax({
+            url: '/list_files',
+            type: 'GET',
+            data: { bucket: selectedBucket },  // Send the selected bucket as a query parameter
+            success: (response) => {
+                // Clear the file list before appending new files
+                $('#file-list').empty();
+
+                if (response.files && response.files.length > 0) {
+                    response.files.forEach(file => {
+                        $('#file-list').append(`<li class="list-group-item">${file}</li>`);
+                    });
+                } else {
+                    $('#file-list').append(`<li class="list-group-item">No files found in bucket</li>`);
+                }
+            },
+            error: (error) => {
+                console.error(`Error listing files in bucket ${selectedBucket}:`, error);
+            }
         });
     }
 
@@ -72,14 +108,6 @@ class S3Manager {
         console.log(`Deleting bucket: ${bucketName}`);
         // Logic to delete a bucket using AWS SDK or API call
         // Example: s3.deleteBucket({Bucket: bucketName})
-    }
-
-    // Method to list files (objects) in a specific bucket
-    listFiles(bucketName) {
-        console.log(`Listing files in bucket: ${bucketName}`);
-        // Logic to list files in the bucket using AWS SDK or API call
-        // Example: s3.listObjectsV2({Bucket: bucketName})
-        // Return or handle the list of files here
     }
 
     // Method to upload a file to a bucket
