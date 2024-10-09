@@ -46,3 +46,25 @@ class S3Manager:
         except Exception as e:
             print(f"Error listing files in bucket {bucket_name}: {e}")
             return None
+        
+    # Method to create a bucket
+    def create_bucket(self, bucket_name):
+        try:
+            self.s3.create_bucket(Bucket=bucket_name, CreateBucketConfiguration={
+                'LocationConstraint': self.region
+            })
+            print(f"Bucket {bucket_name} created successfully.")
+            return True
+        except Exception as e:
+            print(f"Error creating bucket {bucket_name}: {e}")
+            return False
+
+    # Method to delete a bucket
+    def delete_bucket(self, bucket_name):
+        try:
+            self.s3.delete_bucket(Bucket=bucket_name)
+            print(f"Bucket {bucket_name} deleted successfully.")
+            return True
+        except Exception as e:
+            print(f"Error deleting bucket {bucket_name}: {e}")
+            return False

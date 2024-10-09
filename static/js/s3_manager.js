@@ -115,15 +115,39 @@ class S3Manager {
     // Method to create a new bucket
     createBucket(bucketName) {
         console.log(`Creating a new bucket: ${bucketName}`);
-        // Logic to create a new bucket using AWS SDK or API call
-        // Example: s3.createBucket({Bucket: bucketName})
+        
+        $.ajax({
+            url: '/create_bucket',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ bucket_name: bucketName }),
+            success: (response) => {
+                console.log(`Bucket ${bucketName} created successfully.`);
+                this.listBuckets();  // Refresh the bucket list after creation
+            },
+            error: (error) => {
+                console.error(`Error creating bucket: ${bucketName}`, error);
+            }
+        });
     }
 
     // Method to delete a bucket
     deleteBucket(bucketName) {
         console.log(`Deleting bucket: ${bucketName}`);
-        // Logic to delete a bucket using AWS SDK or API call
-        // Example: s3.deleteBucket({Bucket: bucketName})
+        
+        $.ajax({
+            url: '/delete_bucket',
+            type: 'DELETE',
+            contentType: 'application/json',
+            data: JSON.stringify({ bucket_name: bucketName }),
+            success: (response) => {
+                console.log(`Bucket ${bucketName} deleted successfully.`);
+                this.listBuckets();  // Refresh the bucket list after deletion
+            },
+            error: (error) => {
+                console.error(`Error deleting bucket: ${bucketName}`, error);
+            }
+        });
     }
 
     // Method to upload a file to a bucket

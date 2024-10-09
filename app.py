@@ -56,8 +56,35 @@ def list_files():
         # Catch any unexpected errors and return a 500 response
         print(f"Error listing files in bucket {bucket_name}: {e}")
         return jsonify({'error': 'An error occurred while retrieving files'}), 500
-
     
+@app.route('/create_bucket', methods=['POST'])
+def create_bucket():
+    data = request.get_json()
+    bucket_name = data.get('bucket_name')
+
+    if not bucket_name:
+        return jsonify({'error': 'Bucket name is required'}), 400
+
+    success = s3_manager.create_bucket(bucket_name)
+    if success:
+        return jsonify({'message': f'Bucket {bucket_name} created successfully'}), 200
+    else:
+        return jsonify({'error': f'Failed to create bucket {bucket_name}'}), 500
+
+@app.route('/delete_bucket', methods=['DELETE'])
+def delete_bucket():
+    data = request.get_json()
+    bucket_name = data.get('bucket_name')
+
+    if not bucket_name:
+        return jsonify({'error': 'Bucket name is required'}), 400
+
+    success = s3_manager.delete_bucket(bucket_name)
+    if success:
+        return jsonify({'message': f'Bucket {bucket_name} deleted successfully'}), 200
+    else:
+        return jsonify({'error': f'Failed to delete bucket {bucket_name}'}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
