@@ -157,6 +157,49 @@ class S3Manager {
         });
     }
 
+    // Method to delete selected files from the currently selected bucket
+    deleteSelectedFiles() {
+        const selectedBucket = this.getSelectedBucket();
+        const selectedFiles = this.getSelectedFiles();  // Use getSelectedFiles() to get the selected files
+
+        console.log("going to delete files in: ", selectedBucket);
+        console.log("files :" , selectedFiles);
+
+        if (!selectedBucket) {
+            console.log("No bucket selected.");
+            return;
+        }
+
+        if (selectedFiles.length === 0) {
+            console.log("No files selected for deletion.");
+            return;
+        }
+
+        const confirmed = confirm(`Are you sure you want to delete the selected files from bucket: ${selectedBucket}?`);
+
+        if (confirmed) {
+            $.ajax({
+                url: '/delete_files',
+                type: 'DELETE',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    bucket_name: selectedBucket,
+                    files: selectedFiles  // Pass the selected files to the backend
+                }),
+                success: (response) => {
+                    console.log(`Files deleted successfully from ${selectedBucket}.`);
+
+                    // Refresh the file list after successful deletion
+                    this.listFiles();
+                },
+                error: (error) => {
+                    console.error(`Error deleting files from bucket ${selectedBucket}:`, error);
+                }
+            });
+        }
+    }
+
+
     // Method to upload a file to a bucket
     uploadFile(bucketName, file) {
         console.log(`Uploading file: ${file.name} to bucket: ${bucketName}`);

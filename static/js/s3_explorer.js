@@ -46,6 +46,11 @@ $(document).ready(function() {
         }
     });
 
+    // Set up the event listener for the delete files button
+    $('#delete-files-btn').click(() => {
+        s3Manager.deleteSelectedFiles();  // Call the deleteSelectedFiles() method
+    });
+
     // Listing buckets
     s3Manager.listBuckets();
 

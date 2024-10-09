@@ -85,6 +85,24 @@ def delete_bucket():
     else:
         return jsonify({'error': f'Failed to delete bucket {bucket_name}'}), 500
 
+@app.route('/delete_files', methods=['DELETE'])
+def delete_files():
+    data = request.get_json()
+    bucket_name = data.get('bucket_name')
+    files_to_delete = data.get('files', [])
+
+    if not bucket_name:
+        return jsonify({'error': 'Bucket name is required'}), 400
+
+    if len(files_to_delete) == 0:
+        return jsonify({'error': 'No files specified for deletion'}), 400
+
+    success = s3_manager.delete_files(bucket_name, files_to_delete)
+    if success:
+        return jsonify({'message': 'Files deleted successfully'}), 200
+    else:
+        return jsonify({'error': 'Failed to delete files'}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

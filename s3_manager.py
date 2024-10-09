@@ -68,3 +68,17 @@ class S3Manager:
         except Exception as e:
             print(f"Error deleting bucket {bucket_name}: {e}")
             return False
+        
+    # Method to delete files from a bucket
+    def delete_files(self, bucket_name, files):
+        try:
+            delete_objects = [{'Key': file_name} for file_name in files]  # Prepare the list of files to delete
+            response = self.s3.delete_objects(
+                Bucket=bucket_name,
+                Delete={'Objects': delete_objects}
+            )
+            print(f"Files deleted successfully from {bucket_name}.")
+            return True
+        except Exception as e:
+            print(f"Error deleting files from bucket {bucket_name}: {e}")
+            return False
