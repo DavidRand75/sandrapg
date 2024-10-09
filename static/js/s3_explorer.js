@@ -51,6 +51,25 @@ $(document).ready(function() {
         s3Manager.deleteSelectedFiles();  // Call the deleteSelectedFiles() method
     });
 
+    // Event listener to show the modal when the "Upload File" button is clicked
+    $('#upload-file-btn').click(() => {
+        $('#uploadFilesModal').modal('show');  // Show the modal
+    });
+
+    // Event listener for the upload button inside the modal
+    $('#confirm-upload-btn').click(() => {
+        const files = $('#file-input')[0].files;  // Get the selected files from the input
+
+        if (files.length === 0) {
+            alert("No files selected.");
+            return;
+        }
+
+        s3Manager.uploadFiles(files);  // Call the uploadFiles method from S3Manager
+
+        // Close the modal after the upload is triggered
+        $('#uploadFilesModal').modal('hide');
+    });
     // Listing buckets
     s3Manager.listBuckets();
 

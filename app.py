@@ -102,6 +102,23 @@ def delete_files():
         return jsonify({'message': 'Files deleted successfully'}), 200
     else:
         return jsonify({'error': 'Failed to delete files'}), 500
+    
+@app.route('/upload_files', methods=['POST'])
+def upload_files():
+    bucket_name = request.form['bucket_name']
+    files = request.files.getlist('files')
+
+    if not bucket_name:
+        return jsonify({'error': 'Bucket name is required'}), 400
+
+    if len(files) == 0:
+        return jsonify({'error': 'No files selected for upload'}), 400
+
+    success = s3_manager.upload_files(bucket_name, files)
+    if success:
+        return jsonify({'message': 'Files uploaded successfully'}), 200
+    else:
+        return jsonify({'error': 'Failed to upload files'}), 500
 
 
 if __name__ == '__main__':

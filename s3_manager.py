@@ -82,3 +82,15 @@ class S3Manager:
         except Exception as e:
             print(f"Error deleting files from bucket {bucket_name}: {e}")
             return False
+        
+    # Method to upload files to a bucket
+    def upload_files(self, bucket_name, files):
+        try:
+            for file in files:
+                self.s3.put_object(Bucket=bucket_name, Key=file.filename, Body=file)
+            print(f"Files uploaded successfully to {bucket_name}.")
+            return True
+        except Exception as e:
+            print(f"Error uploading files to bucket {bucket_name}: {e}")
+            return False
+

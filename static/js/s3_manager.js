@@ -200,12 +200,46 @@ class S3Manager {
     }
 
 
-    // Method to upload a file to a bucket
-    uploadFile(bucketName, file) {
-        console.log(`Uploading file: ${file.name} to bucket: ${bucketName}`);
-        // Logic to upload a file to the bucket using AWS SDK or API call
-        // Example: s3.putObject({Bucket: bucketName, Key: file.name, Body: file})
+    // Method to upload files to the selected bucket
+    uploadFiles(files) {
+        const selectedBucket = this.getSelectedBucket();
+
+        if (!selectedBucket) {
+            alert("No bucket selected.");
+            return;
+        }
+
+        if (files.length === 0) {
+            alert("No files selected for upload.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('bucket_name', selectedBucket);
+
+        // Append the files to the form data
+        for (let i = 0; i < files.length; i++) {
+            formData.append('files', files[i]);
+        }
+
+        $.ajax({
+            url: '/upload_files',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: (response) => {
+                console.log(`Files uploaded successfully to ${selectedBucket}.`);
+
+                // Refresh the file list after successful upload
+                this.listFiles();
+            },
+            error: (error) => {
+                console.error(`Error uploading files to bucket ${selectedBucket}:`, error);
+            }
+        });
     }
+
 
     // Method to download a file from a bucket
     downloadFile(bucketName, fileName) {
