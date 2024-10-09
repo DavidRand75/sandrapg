@@ -239,21 +239,6 @@ class S3Manager {
             }
         });
     }
-
-
-    // Method to download a file from a bucket
-    downloadFile(bucketName, fileName) {
-        console.log(`Downloading file: ${fileName} from bucket: ${bucketName}`);
-        // Logic to download a file from the bucket using AWS SDK or API call
-        // Example: s3.getObject({Bucket: bucketName, Key: fileName})
-    }
-
-    // Method to delete a file from a bucket
-    deleteFile(bucketName, fileName) {
-        console.log(`Deleting file: ${fileName} from bucket: ${bucketName}`);
-        // Logic to delete a file from the bucket using AWS SDK or API call
-        // Example: s3.deleteObject({Bucket: bucketName, Key: fileName})
-    }
 }
 
 

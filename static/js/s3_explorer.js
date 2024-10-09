@@ -70,23 +70,4 @@ $(document).ready(function() {
         // Close the modal after the upload is triggered
         $('#uploadFilesModal').modal('hide');
     });
-    // Listing buckets
-    s3Manager.listBuckets();
-
-    // Listing files in a bucket
-    s3Manager.listFiles('existing-bucket-name');
-
-    // Uploading a file to a bucket
-    const fileToUpload = { name: 'example.txt' }; // Replace with actual file object
-    s3Manager.uploadFile('existing-bucket-name', fileToUpload);
-
-    // Downloading a file from a bucket
-    s3Manager.downloadFile('existing-bucket-name', 'example.txt');
-
-    // Deleting a file from a bucket
-    s3Manager.deleteFile('existing-bucket-name', 'example.txt');
-
-    // Deleting a bucket
-    s3Manager.deleteBucket('new-bucket-name');
-
-});
+  });
