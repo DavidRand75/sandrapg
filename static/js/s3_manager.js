@@ -63,7 +63,7 @@ class S3Manager {
         const selectedBucket = this.selectedBucket;
 
         if (!selectedBucket) {
-            console.error('No bucket selected');
+            console.log('First load - No bucket selected.');
             return;
         }
 
@@ -111,7 +111,7 @@ class S3Manager {
 
         return selectedFiles;
     }
-    
+
     // Method to create a new bucket
     createBucket(bucketName) {
         console.log(`Creating a new bucket: ${bucketName}`);
