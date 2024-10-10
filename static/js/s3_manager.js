@@ -4,6 +4,7 @@ class S3Manager {
         
         this.bucketList = [];  // Store the list of buckets
         this.selectedBucket = null;  // Member variable to store the selected bucket
+        this.accumulatedFiles = {};  // Dictionary to store selected files by bucket
 
         this.init();
     }
@@ -294,6 +295,58 @@ class S3Manager {
         });
     }
 
+    addSelectedFiles() {
+        const selectedBucket = this.getSelectedBucket();
+        const selectedFiles = this.getSelectedFiles();
+    
+        if (!selectedBucket || selectedFiles.length === 0) {
+            console.log("No bucket or files selected.");
+            return;
+        }
+    
+        if (!this.accumulatedFiles[selectedBucket]) {
+            this.accumulatedFiles[selectedBucket] = [];
+        }
+    
+        // Add new files, ensuring no duplicates
+        selectedFiles.forEach(file => {
+            if (!this.accumulatedFiles[selectedBucket].includes(file)) {
+                this.accumulatedFiles[selectedBucket].push(file);
+            }
+        });
+    
+        console.log("Accumulated files:", this.accumulatedFiles);
+    
+        // Update the card showing the accumulated files
+        this.updateAccumulatedFilesCard();
+    }
+
+    clearSelectedFiles(){
+
+        this.accumulatedFiles = {}; 
+        $('#accumulated-files-list').empty();  // Clears all <li> elements from the list
+        // Update the card showing the accumulated files
+        this.updateAccumulatedFilesCard();
+    }
+    
+    updateAccumulatedFilesCard() {
+        $('#accumulated-files-list').empty();  // Clear the existing list
+    
+        // Iterate over accumulated files and display each file with a checkbox
+        for (const [bucket, files] of Object.entries(this.accumulatedFiles)) {
+            $('#accumulated-files-list').append(`<h5 style="font-size: 1.7rem;">Bucket: ${bucket}</h5>`);
+    
+            files.forEach(file => {
+                $('#accumulated-files-list').append(`
+                    <li class="list-group-item" style="font-size: 1.7rem;">
+                        <input type="checkbox" class="accumulated-file-checkbox" value="${file}" style="transform: scale(1.5); margin-right: 10px;">
+                        ${file}
+                    </li>
+                `);
+            });
+        }
+    }
+    
 
 }
 

@@ -120,6 +120,13 @@ $(document).ready(function() {
         s3Manager.downloadFiles(selectedBucket, selectedFiles);
     });
 
+    $('#Add-files-btn').click(() => {
+        s3Manager.addSelectedFiles();  // Call the deleteSelectedFiles() method
+    });
+
+    $('#clear-files-btn').click(() => {
+        s3Manager.clearSelectedFiles();  // Call the deleteSelectedFiles() method
+    });
 
 
   });
