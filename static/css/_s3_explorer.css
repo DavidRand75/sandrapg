@@ -58,15 +58,15 @@ h4, h5 {
 
 /* Override the default button background and text color */
 .custom-btn-color1 {
-    background-color: #d08856 !important;  /* Custom background color */
-    color: rgb(27, 27, 27);               /* Custom text color */
+    background-color: #285185 !important;  /* Custom background color */
+    color: rgb(238, 235, 235);               /* Custom text color */
     border: none;               /* Remove default border */
 }
 
 /* Override the button hover state */
 .custom-btn-color1:hover {
-    background-color: #d16f29 !important;  /* Custom hover background color */
-    color: rgb(27, 27, 27);;             /* Custom hover text color */
+    background-color: #0e3260 !important;  /* Custom hover background color */
+    color: rgb(238, 235, 235);             /* Custom hover text color */
 }
 
 /* Override the default button background and text color */
