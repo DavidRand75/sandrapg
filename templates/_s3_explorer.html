@@ -7,21 +7,21 @@
             <div class="row">
                 <!-- Left Column: Buckets -->
                 <div class="col-md-6">
-                    <h5>Buckets</h5>
+                    <h5>Buckets:</h5>
                     <!-- Automatically populated bucket list -->
                     <ul id="bucket-list" class="list-group mb-3">
                         <!-- Example bucket (dynamically generated) -->
                         <!-- <li class="list-group-item">my-bucket-name</li> -->
                     </ul>
                     <!-- Button to create new bucket -->
-                    <button class="btn btn-primary btn-block custom-btn" id="create-bucket-btn">Create New Bucket</button>
+                    <button class="btn btn-primary btn-block custom-btn custom-btn-color1" id="create-bucket-btn">Create New Bucket</button>
                     <!-- Button to delete selected bucket -->
-                    <button class="btn btn-danger btn-block custom-btn mt-2" id="delete-bucket-btn">Delete Selected Bucket</button>
+                    <button class="btn btn-danger btn-block custom-btn mt-2 custom-btn-color2" id="delete-bucket-btn">Delete Selected Bucket</button>
                 </div>
 
                 <!-- Right Column: Files/Objects -->
                 <div class="col-md-6">
-                    <h5>Files in Bucket: <span id="selected-bucket">None</span></h5>
+                    <h5>Files in Bucket: <span id="selected-bucket"></span></h5>
                     
                     <!-- Automatically populated file list -->
                     <ul id="file-list" class="list-group mb-3">
@@ -30,10 +30,10 @@
                     </ul>
                     
                     <!-- Upload File button -->
-                    <button class="btn btn-primary btn-block custom-btn" id="upload-file-btn">Upload File</button>
+                    <button class="btn btn-primary btn-block custom-btn custom-btn-color1" id="upload-file-btn">Upload File</button>
                     
                     <!-- Download and Delete buttons for files -->
-                    <button class="btn btn-danger btn-block custom-btn mt-2" id="delete-files-btn">Delete Selected Files</button>
+                    <button class="btn btn-danger btn-block custom-btn mt-2 custom-btn-color2" id="delete-files-btn">Delete Selected Files</button>
                     <button class="btn btn-secondary btn-block custom-btn mt-2" id="download-files-btn">Download Selected Files</button>
                     <button class="btn btn-info btn-block custom-btn2 mt-2" id="Add-files-btn">Add Selected Files</button>
                 </div>
