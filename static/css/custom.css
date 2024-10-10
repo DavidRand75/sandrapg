@@ -1,0 +1,5 @@
+/* Default body background color */
+body {
+    background-color: #f7f1f0;  /* Light gray as an example */
+    color: black;  /* Default text color */
+}

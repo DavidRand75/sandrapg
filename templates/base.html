@@ -13,6 +13,9 @@
 
     {% block styles %}{% endblock %}
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/_navbar.css') }}">
+   
+
     <!-- Extendable block for additional head content -->
     {% block head %}
     <!-- Placeholder for additional CSS or meta tags -->
@@ -22,17 +25,7 @@
     
     <!-- Navbar block -->
     {% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
-                </li>
-                <!-- Add more links as needed -->
-            </ul>
-        </div>
-    </nav>
+        {% include 'navbar.html' %}
     {% endblock %}
     
     <!-- Main content block -->
@@ -42,11 +35,6 @@
 
     <!-- Footer block -->
     {% block footer %}
-    <footer class="footer mt-auto py-3 bg-light">
-        <div class="container">
-            <span class="text-muted">My website footer content.</span>
-        </div>
-    </footer>
     {% endblock %}
 
     <!-- JavaScript Libraries: jQuery and Bootstrap JS -->

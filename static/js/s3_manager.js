@@ -28,8 +28,8 @@ class S3Manager {
                 // Append each bucket as a list item with a radio button
                 response.buckets.forEach(bucket => {
                     $('#bucket-list').append(
-                        `<li class="list-group-item" id="bucket-${bucket}">
-                            <input type="radio" name="bucket" value="${bucket}" class="mr-2 bucket-radio"> 
+                        `<li class="list-group-item" id="bucket-${bucket}" style="font-size: 1.7rem;">
+                            <input type="radio" name="bucket" value="${bucket}" class="mr-2 bucket-radio" style="transform: scale(1.5);"> 
                             ${bucket}
                          </li>`
                     );
@@ -80,8 +80,8 @@ class S3Manager {
                 if (response.files && response.files.length > 0) {
                     response.files.forEach(file => {
                         $('#file-list').append(`
-                            <li class="list-group-item">
-                                <input type="checkbox" class="file-checkbox" value="${file}">
+                            <li class="list-group-item" style="font-size: 1.7rem;">
+                                <input type="checkbox" class="file-checkbox" value="${file}" style="transform: scale(1.5);">
                                 ${file}
                             </li>
                         `);

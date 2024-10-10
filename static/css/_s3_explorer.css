@@ -1,6 +1,7 @@
 /* General font size (double the normal size) */
 h4, h5 {
     font-size: 2rem; /* Twice the normal size */
+    color: black;
 }
 
 /* Custom card design with rounded corners and heavy shadow */

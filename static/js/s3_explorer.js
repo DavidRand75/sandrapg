@@ -82,7 +82,7 @@ $(document).ready(function() {
         // Iterate over the selected files and display them in the list
         for (let i = 0; i < fileList.length; i++) {
             const fileName = fileList[i].name;
-            fileDisplayList.append(`<li class="list-group-item">${fileName}</li>`);
+            fileDisplayList.append(`<li class="list-group-item" style="font-size: 1.5rem;">${fileName}</li>`);
         }
     });
 

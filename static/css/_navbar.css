@@ -1,0 +1,22 @@
+/* Override the Bootstrap navbar background color */
+.navbar-custom {
+    background-color: #403234 !important;  /* Custom green background */
+    height: 80px;  /* Set the height of the navbar */
+}
+
+/* Override the navbar text color and size */
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+    color: white !important;  /* Custom white text for links */
+    font-size: 2rem !important;  /* Control the text size */
+}
+
+/* Adjust the height of navbar links */
+.navbar-custom .nav-link {
+    line-height: 80px !important;  /* Vertically center the link text in the navbar */
+}
+
+/* Hover effect for the links */
+.navbar-custom .nav-link:hover {
+    color: #ddd !important;  /* Lighter color on hover */
+}
