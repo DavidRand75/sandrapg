@@ -104,12 +104,22 @@ $(document).ready(function() {
         $('#selected-file-list').empty();
         $('#file-input').val(null);  // Clear the input field to reset the file selection
     });
-    
+
     // Clear file list when the modal is hidden (closed)
     $('#uploadFilesModal').on('hidden.bs.modal', function () {
         $('#selected-file-list').empty();  // Clear the file display list
         $('#file-input').val(null);  // Clear the input field
     });
+
+    // Event listener for the download button
+    $('#download-files-btn').click(() => {
+        const selectedBucket = s3Manager.getSelectedBucket();  // Get selected bucket
+        const selectedFiles = s3Manager.getSelectedFiles();  // Get selected files
+
+        // Call the downloadFiles method from S3Manager
+        s3Manager.downloadFiles(selectedBucket, selectedFiles);
+    });
+
 
 
   });

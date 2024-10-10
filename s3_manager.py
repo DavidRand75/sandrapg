@@ -1,5 +1,5 @@
 import boto3
-from botocore.exceptions import NoCredentialsError, PartialCredentialsError
+from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
 
 class S3Manager:
     def __init__(self, access_key, secret_key, region):
@@ -87,10 +87,27 @@ class S3Manager:
     def upload_files(self, bucket_name, files):
         try:
             for file in files:
-                self.s3.put_object(Bucket=bucket_name, Key=file.filename, Body=file)
+                self.s3.put_object(Bucket=bucket_name, 
+                                   Key=file.filename, 
+                                   Body=file,
+                                   CacheControl="no-cache, no-store, must-revalidate")
             print(f"Files uploaded successfully to {bucket_name}.")
             return True
         except Exception as e:
             print(f"Error uploading files to bucket {bucket_name}: {e}")
             return False
+        
+     # Method to generate pre-signed URLs for files
+    def generate_presigned_url(self, bucket_name, file_name, expiration=3600):
+        print("generating url ...:", file_name)
+        try:
+            response = self.s3.generate_presigned_url(
+                'get_object',
+                Params={'Bucket': bucket_name, 'Key': file_name},
+                ExpiresIn=expiration  # URL expires in 1 hour by default
+            )
+            return response
+        except ClientError as e:
+            print(f"Error generating pre-signed URL: {e}")
+            return None
 

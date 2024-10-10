@@ -119,6 +119,24 @@ def upload_files():
         return jsonify({'message': 'Files uploaded successfully'}), 200
     else:
         return jsonify({'error': 'Failed to upload files'}), 500
+    
+@app.route('/generate_presigned_url', methods=['POST'])
+def generate_presigned_url():
+    data = request.get_json()
+    bucket_name = data.get('bucket_name')
+    files = data.get('files', [])
+
+    if not bucket_name or not files:
+        return jsonify({'error': 'Bucket name and files are required'}), 400
+
+    presigned_urls = []
+
+    for file_name in files:
+        url = s3_manager.generate_presigned_url(bucket_name, file_name)
+        if url:
+            presigned_urls.append({'file_name': file_name, 'url': url})
+
+    return jsonify({'presigned_urls': presigned_urls}), 200
 
 
 if __name__ == '__main__':
