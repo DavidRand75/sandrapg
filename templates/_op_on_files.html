@@ -2,16 +2,16 @@
     <h1>Selected Files For Processing:</h1>
 
     <!-- Card to display the accumulated files -->
-    <div class="card">
+    <div class="card custom-card">
         <div class="card-body">
             <h5 class="card-title">Selected Files</h5>
             <ul>
                 {% for bucket, files in accumulated_files.items() %}
-                    <li>
-                        <strong>Bucket:</strong> {{ bucket }}
+                    <li style="font-size: 1.7rem;">
+                        <strong style="font-size: 1.7rem;">Bucket:</strong> <span >{{ bucket }}</span>
                         <ul>
                             {% for file in files %}
-                                <li>{{ file }}</li>
+                                <li style="font-size: 1.7rem;">{{ file }}</li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -19,4 +19,33 @@
             </ul>
         </div>
     </div>
+
+    <br>
+
+<!-- Card to display the accumulated files -->
+<div class="card custom-card">
+    <div class="card-body">
+        <h5 class="card-title">Available Algorithms</h5>
+        <ul style="list-style-type: none; padding-left: 0; font-size: 1.7rem;">
+            {% for alg, description in alglist.items() %}
+            <li style="display: flex; align-items: center; margin-bottom: 10px; border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
+                <input type="checkbox" id="alg_{{ loop.index }}" name="algorithms" value="{{ alg }}" 
+                       style="transform: scale(1.5); margin-right: 10px;">
+                <label for="alg_{{ loop.index }}" style="flex-grow: 1; word-break: break-word; overflow-wrap: break-word;">
+                    <strong>{{ alg }}:</strong> {{ description }}
+                </label>
+            </li>
+            {% endfor %}
+        </ul>            
+        <h5 class="card-title" style="color:rgb(122, 48, 48) !important; font-weight: bold;">Run selected algorithms on the list of files</h5>
+        <button class="btn custom-btn-color2 btn-block mt-2" id="run-algs-btn" style="font-size: 1.7rem; width: 60%;">Run</button>
+    </div>
+</div>
+
+
+
+
+
+
+
 </div>

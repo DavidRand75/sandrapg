@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request, url_for, session, redirect
 from s3_manager import S3Manager
+from alglist import alglist
 
 import os
 from dotenv import load_dotenv
@@ -171,7 +172,7 @@ def process_files():
 @app.route('/show_accumulated_files')
 def show_accumulated_files():
     accumulated_files = session.get('accumulated_files', {})
-    return render_template('show_accumulated_files.html', accumulated_files=accumulated_files)
+    return render_template('show_accumulated_files.html', accumulated_files=accumulated_files,alglist=alglist)
 
 
 if __name__ == '__main__':
