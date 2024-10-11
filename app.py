@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, url_for, session, redirect
 from s3_manager import S3Manager
 
 import os
@@ -13,12 +13,17 @@ load_dotenv()
 aws_access_key = os.getenv('AWS_ACCESS_KEY_ID')
 aws_secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 aws_region = os.getenv('AWS_DEFAULT_REGION')
+flask_session_key = os.getenv('FLASK_SESSION_KEY')
 
 # Pass environment variables to S3Manager
 s3_manager = S3Manager(aws_access_key, aws_secret_key, aws_region)
 
 
+
 app = Flask(__name__)
+
+# Set a secret key for session management
+app.secret_key = flask_session_key
 
 # Define the route for the home pagepython 
 @app.route('/')
@@ -137,6 +142,36 @@ def generate_presigned_url():
             presigned_urls.append({'file_name': file_name, 'url': url})
 
     return jsonify({'presigned_urls': presigned_urls}), 200
+
+@app.route('/process_files', methods=['POST'])
+def process_files():
+    try:
+        data = request.get_json()
+        if not data:
+            print("No data received from request")
+            return {'error': 'No data received'}, 400
+        
+        accumulated_files = data.get('accumulatedFiles')
+        if not accumulated_files:
+            print("No accumulatedFiles found in the data")
+            return {'error': 'No accumulatedFiles provided'}, 400
+
+        print("Accumulated files received:", accumulated_files)
+
+        # Store accumulated_files in the session
+        session['accumulated_files'] = accumulated_files
+
+        # Redirect to the new template
+        return {'redirect_url': url_for('show_accumulated_files')}
+    
+    except Exception as e:
+        print(f"Error processing files: {e}")
+        return {'error': str(e)}, 500
+
+@app.route('/show_accumulated_files')
+def show_accumulated_files():
+    accumulated_files = session.get('accumulated_files', {})
+    return render_template('show_accumulated_files.html', accumulated_files=accumulated_files)
 
 
 if __name__ == '__main__':

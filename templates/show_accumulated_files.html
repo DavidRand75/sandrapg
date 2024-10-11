@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/_s3_explorer.css') }}">
+{% endblock %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+    <br>
+    <h1>Welcome to Sandra's S3 Explorer.</h1>
+    <h2>Our Personal Hub to Effortlessly Manage and Share Files!</h2>
+
+    <!-- Include the S3 Explorer here -->
+    {% include '_op_on_files.html' %}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }} <!-- Ensure base scripts are loaded -->
+    <script src="{{ url_for('static', filename='js/s3_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/s3_explorer.js') }}"></script>
+{% endblock %}

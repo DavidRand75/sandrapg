@@ -1,0 +1,22 @@
+<div class="container">
+    <h1>Accumulated Files</h1>
+
+    <!-- Card to display the accumulated files -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Selected Files</h5>
+            <ul>
+                {% for bucket, files in accumulated_files.items() %}
+                    <li>
+                        <strong>Bucket:</strong> {{ bucket }}
+                        <ul>
+                            {% for file in files %}
+                                <li>{{ file }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

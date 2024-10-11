@@ -128,5 +128,26 @@ $(document).ready(function() {
         s3Manager.clearSelectedFiles();  // Call the deleteSelectedFiles() method
     });
 
+    // When the "Process Selected Files" button is clicked
+    $('#process-files-btn').click(function() {
+        const accumulatedFiles = s3Manager.accumulatedFiles;
+        console.log(accumulatedFiles)
+        // Send accumulatedFiles to the Flask backend via AJAX
+        $.ajax({
+            url: '/process_files',  // Flask route for processing selected files
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ accumulatedFiles: accumulatedFiles }),  // Send the accumulated files as JSON
+            success: function(response) {
+                // Redirect to the new page to display the files in a card
+                window.location.href = response.redirect_url;
+            },
+            error: function(error) {
+                console.error('Error processing files:', error);
+            }
+        });
+    });
+
+
 
   });
