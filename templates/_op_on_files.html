@@ -7,11 +7,12 @@
             <h5 class="card-title">Selected Files</h5>
             <ul>
                 {% for bucket, files in accumulated_files.items() %}
-                    <li style="font-size: 1.7rem;">
-                        <strong style="font-size: 1.7rem;">Bucket:</strong> <span >{{ bucket }}</span>
-                        <ul>
+                    <li id="bucket-{{ loop.index }}" style="font-size: 1.7rem;">
+                        <strong style="font-size: 1.7rem;">Bucket:</strong> 
+                        <span id="bucket-name-{{ loop.index }}">{{ bucket }}</span>
+                        <ul id="bucket-files-{{ loop.index }}">
                             {% for file in files %}
-                                <li style="font-size: 1.7rem;">{{ file }}</li>
+                                <li id="file-{{ loop.index }}-{{ loop.index0 }}" style="font-size: 1.7rem;">{{ file }}</li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -19,6 +20,7 @@
             </ul>
         </div>
     </div>
+
 
     <br>
 
@@ -49,3 +51,26 @@
 
 
 </div>
+
+<!-- Modal for confirming the selected algorithms and files -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5>Selected Files and Algorithms:</h5>
+          <ul id="selectedItemsList"></ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" id="confirm-btn" class="btn btn-primary">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -174,6 +174,18 @@ def show_accumulated_files():
     accumulated_files = session.get('accumulated_files', {})
     return render_template('show_accumulated_files.html', accumulated_files=accumulated_files,alglist=alglist)
 
+@app.route('/process_data', methods=['POST'])
+def process_data():
+    data = request.get_json()  # Get the dictionary from the frontend
+    selected_files = data.get('files', {})
+    selected_algorithms = data.get('algorithms', [])
+
+    # Here you can process the files and algorithms as needed
+    print("Selected Files:", selected_files)
+    print("Selected Algorithms:", selected_algorithms)
+
+    # Send a response back to the frontend
+    return jsonify({'message': 'Processing initiated', 'status': 'success'})
 
 if __name__ == '__main__':
     app.run(debug=True)
