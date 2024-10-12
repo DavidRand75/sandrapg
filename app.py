@@ -1,6 +1,10 @@
 from flask import Flask, render_template, jsonify, request, url_for, session, redirect
 from s3_manager import S3Manager
 from alglist import alglist
+import zmq
+import json
+
+
 
 import os
 from dotenv import load_dotenv
@@ -16,15 +20,26 @@ aws_secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 aws_region = os.getenv('AWS_DEFAULT_REGION')
 flask_session_key = os.getenv('FLASK_SESSION_KEY')
 
-# Pass environment variables to S3Manager
-s3_manager = S3Manager(aws_access_key, aws_secret_key, aws_region)
-
-
-
 app = Flask(__name__)
 
 # Set a secret key for session management
 app.secret_key = flask_session_key
+
+# Initialize ZeroMQ Context and PUB socket
+context = zmq.Context()
+socket = context.socket(zmq.PUSH)
+# Set the queue size (high water mark) to 1000 messages
+socket.setsockopt(zmq.SNDHWM, 1000)  # This sets the maximum number of queued messages to 1000
+
+# Bind the PUB socket only once when the app starts
+try:
+    socket.bind("tcp://*:5555")  # Use port 5555 for PUB
+    print("ZeroMQ PUB socket bound to port 5555")
+except zmq.ZMQError as e:
+    print(f"Failed to bind ZeroMQ PUB socket to port 5555: {e}")
+
+
+
 
 # Define the route for the home pagepython 
 @app.route('/')
@@ -33,6 +48,8 @@ def home():
 
 @app.route('/list_buckets', methods=['GET'])
 def list_buckets():
+    global s3_manager
+
     buckets = s3_manager.list_buckets()
     if buckets:
         return jsonify({'buckets': buckets}), 200
@@ -41,6 +58,8 @@ def list_buckets():
     
 @app.route('/list_files', methods=['GET'])
 def list_files():
+    global s3_manager
+
     bucket_name = request.args.get('bucket')  # Get the bucket name from the query parameters
     if not bucket_name:
         return jsonify({'error': 'Bucket name is required'}), 400
@@ -65,6 +84,8 @@ def list_files():
     
 @app.route('/create_bucket', methods=['POST'])
 def create_bucket():
+    global s3_manager
+
     data = request.get_json()
     bucket_name = data.get('bucket_name')
 
@@ -79,6 +100,8 @@ def create_bucket():
 
 @app.route('/delete_bucket', methods=['DELETE'])
 def delete_bucket():
+    global s3_manager
+
     data = request.get_json()
     bucket_name = data.get('bucket_name')
 
@@ -93,6 +116,8 @@ def delete_bucket():
 
 @app.route('/delete_files', methods=['DELETE'])
 def delete_files():
+    global s3_manager
+
     data = request.get_json()
     bucket_name = data.get('bucket_name')
     files_to_delete = data.get('files', [])
@@ -111,6 +136,8 @@ def delete_files():
     
 @app.route('/upload_files', methods=['POST'])
 def upload_files():
+    global s3_manager
+
     bucket_name = request.form['bucket_name']
     files = request.files.getlist('files')
 
@@ -128,6 +155,7 @@ def upload_files():
     
 @app.route('/generate_presigned_url', methods=['POST'])
 def generate_presigned_url():
+    global s3_manager
     data = request.get_json()
     bucket_name = data.get('bucket_name')
     files = data.get('files', [])
@@ -184,8 +212,36 @@ def process_data():
     print("Selected Files:", selected_files)
     print("Selected Algorithms:", selected_algorithms)
 
+    tasks = []
+
+    # Iterate over each bucket and its files
+    for bucket, files in selected_files.items():
+        for file in files:
+            # Create a task for each file and each algorithm
+            for algorithm in selected_algorithms:
+                task = (bucket, file, algorithm)
+                tasks.append(task)
+
+                # Log the task and its type for debugging
+                task_json = json.dumps(task)
+                print(f"Sending task: {task_json}, Type: {type(task_json)}")
+                try:
+                    # Send the task in non-blocking mode
+                    socket.send_string(task_json, zmq.NOBLOCK)
+                except zmq.Again:
+                    # If the queue is full, log the event
+                    print(f"Queue full, could not send task: {task_json}")
+
+    print("Generated Tasks:", tasks)  
+
     # Send a response back to the frontend
     return jsonify({'message': 'Processing initiated', 'status': 'success'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+
+    # Pass environment variables to S3Manager
+    s3_manager = S3Manager(aws_access_key, aws_secret_key, aws_region)
+
+    #app.run(debug=True)
+    app.run(debug=False, threaded=False)
+    
