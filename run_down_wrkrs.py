@@ -20,7 +20,7 @@ app = Flask(__name__)
 worker_pids = []
 
 # Function to start a worker
-def start_worker(worker_count=1, create_console=False):
+def start_worker(worker_count=2, create_console=False):
     """Start a number of worker processes and store their PIDs."""
     global worker_pids
 

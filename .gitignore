@@ -4,3 +4,5 @@ __pycache__/
 
 downloadworker.log
 algorithmworker.log
+algorithm_router.log
+download_router.log

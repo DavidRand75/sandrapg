@@ -28,9 +28,10 @@ app = Flask(__name__)
 # Set a secret key for session management
 app.secret_key = flask_session_key
 
+'''
 # Initialize ZeroMQ Context and PUB socket
 context = zmq.Context()
-socket = context.socket(zmq.PUSH)
+socket = context.socket(zmq.ROUTER)
 # Set the queue size (high water mark) to 1000 messages
 socket.setsockopt(zmq.SNDHWM, 1000)  # This sets the maximum number of queued messages to 1000
 
@@ -41,7 +42,7 @@ try:
 except zmq.ZMQError as e:
     print(f"Failed to bind ZeroMQ PUB socket to port 5557: {e}")
 
-
+'''
 
 
 # Define the route for the home pagepython 
@@ -244,6 +245,11 @@ def process_data():
 @app.route('/process_data', methods=['POST'])
 def process_data():
     data = request.get_json()  # Get the dictionary from the frontend
+
+    context = zmq.Context()
+    socket = context.socket(zmq.DEALER)  # Dealer to forword to router
+    socket.connect("tcp://localhost:5557")  # Connect to Dealer socket for workers
+
     selected_files = data.get('files', {})
     selected_algorithms = data.get('algorithms', [])
 
@@ -270,9 +276,8 @@ def process_data():
             try:
                 # Send the task in non-blocking mode
                 socket.send_string(task_json, zmq.NOBLOCK)
-            except zmq.Again:
-                # If the queue is full, log the event
-                print(f"Queue full, could not send task: {task_json}")
+            except zmq.ZMQError as e:
+                print(f"Could not send task due to: {e}")
 
             # Add task to list for tracking (if needed)
             tasks.append(task)
