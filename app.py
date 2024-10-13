@@ -9,9 +9,12 @@ import json
 import os
 from dotenv import load_dotenv
 
-
 # Load the .env file
 load_dotenv()
+
+# Ensure the shared directory exists before starting download workers
+SHARED_DOWNLOAD_DIR = os.getenv('SHARED_DOWNLOAD_DIR', '/tmp/shared_audio_files')
+os.makedirs(SHARED_DOWNLOAD_DIR, exist_ok=True)  # This runs before any worker starts
 
 
 # Retrieve environment variables
@@ -33,10 +36,10 @@ socket.setsockopt(zmq.SNDHWM, 1000)  # This sets the maximum number of queued me
 
 # Bind the PUB socket only once when the app starts
 try:
-    socket.bind("tcp://*:5555")  # Use port 5555 for PUB
-    print("ZeroMQ PUB socket bound to port 5555")
+    socket.bind("tcp://*:5557")  # Use port 5557 for PUB
+    print("ZeroMQ PUB socket bound to port 5557")
 except zmq.ZMQError as e:
-    print(f"Failed to bind ZeroMQ PUB socket to port 5555: {e}")
+    print(f"Failed to bind ZeroMQ PUB socket to port 5557: {e}")
 
 
 
@@ -201,7 +204,7 @@ def process_files():
 def show_accumulated_files():
     accumulated_files = session.get('accumulated_files', {})
     return render_template('show_accumulated_files.html', accumulated_files=accumulated_files,alglist=alglist)
-
+'''
 @app.route('/process_data', methods=['POST'])
 def process_data():
     data = request.get_json()  # Get the dictionary from the frontend
@@ -236,7 +239,48 @@ def process_data():
 
     # Send a response back to the frontend
     return jsonify({'message': 'Processing initiated', 'status': 'success'})
+'''
 
+@app.route('/process_data', methods=['POST'])
+def process_data():
+    data = request.get_json()  # Get the dictionary from the frontend
+    selected_files = data.get('files', {})
+    selected_algorithms = data.get('algorithms', [])
+
+    # Here you can process the files and algorithms as needed
+    print("Selected Files:", selected_files)
+    print("Selected Algorithms:", selected_algorithms)
+
+    tasks = []
+
+   # Iterate over each bucket and its files
+    for bucket, files in selected_files.items():
+        for file in files:
+            # Create a task for each file with all selected algorithms
+            task = {
+                'bucket': bucket,
+                'file': file,
+                'algorithms': selected_algorithms  # Pass the entire list of algorithms
+            }
+
+            # Log the task and its type for debugging
+            task_json = json.dumps(task)
+            print(f"Sending task: {task_json}, Type: {type(task_json)}")
+
+            try:
+                # Send the task in non-blocking mode
+                socket.send_string(task_json, zmq.NOBLOCK)
+            except zmq.Again:
+                # If the queue is full, log the event
+                print(f"Queue full, could not send task: {task_json}")
+
+            # Add task to list for tracking (if needed)
+            tasks.append(task)
+
+    print("Generated Tasks:", tasks)
+
+    # Send a response back to the frontend
+    return jsonify({'message': 'Processing initiated', 'status': 'success'})
 if __name__ == '__main__':
 
     # Pass environment variables to S3Manager

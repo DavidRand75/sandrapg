@@ -1,24 +1,57 @@
 import zmq
-import time
 import os
+import subprocess
 
-def worker():
+import logging
+import traceback
+
+
+# Configure logging
+logging.basicConfig(filename='algorithmworker.log', level=logging.ERROR, 
+                    format='%(asctime)s %(levelname)s %(message)s')
+
+def algorithm_worker():
     context = zmq.Context()
 
-    # Create PULL socket to receive tasks from the Flask app
+    # PULL socket to receive tasks from download workers
     receiver = context.socket(zmq.PULL)
-    receiver.connect("tcp://localhost:5555")  # Connect to Flask PUSH
+    receiver.connect("tcp://localhost:5556")  # Connect to download workers' PUSH socket
 
-    print(f"Worker {os.getpid()} connected to PULL socket.")
+    print(f"Started an algorithm worker on PID {os.getpid()}")
+    logging.error(f"Started an algorithm worker on PID {os.getpid()}")
 
     while True:
-        task = receiver.recv_string()  # Receive task from Flask
-        print(f"Worker {os.getpid()} received task: {task}")
+        # Receive a task to process a file with an algorithm
+        task = receiver.recv_json()  # Task format: {'file': ..., 'algorithm': ...}
+        file_path = task['file']
+        algorithm = task['algorithm']
 
-        # Simulate file processing (replace this with your real processing logic)
-        time.sleep(1)
+        print(f"Worker {os.getpid()} processing {file_path} with {algorithm}")
+        logging.error(f"Worker {os.getpid()} processing {file_path} with {algorithm}")
 
-        print(f"Worker {os.getpid()} completed task: {task}")
+
+        # Run the algorithm on the file
+        run_algorithm(algorithm, file_path)
+
+def run_algorithm(algorithm, file_path):
+    print("Running algo: ", algorithm)
+    try:
+        # Run the corresponding Python script for the algorithm
+        '''
+        result = subprocess.run(
+            ["python", f"{algorithm}.py", file_path],
+            capture_output=True, text=True
+        )
+        '''
+        result = subprocess.run(
+            ["python", "dummyAlg.py", file_path],
+            capture_output=True, text=True
+        )
+        print(f"Algorithm {algorithm} executed on {file_path}, result: {result.stdout}")
+    except Exception as e:
+        logging.error(f"Error in worker {os.getpid()} while trying to run the algorithm: {algorithm}", exc_info=True)
+        traceback.print_exc()
+        print(f"Error running algorithm {algorithm} on {file_path}: {e}")
 
 if __name__ == "__main__":
-    worker()
+    algorithm_worker()
