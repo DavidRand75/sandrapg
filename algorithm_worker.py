@@ -4,6 +4,8 @@ import subprocess
 import logging
 import traceback
 import json
+from datetime import datetime
+import  sys
 
 # Configure logging
 logging.basicConfig(filename='algorithmworker.log', level=logging.INFO, 
@@ -48,11 +50,54 @@ def algorithm_worker():
 def run_algorithm(algorithm, file_path):
     logging.info(f"Running algorithm {algorithm} on {file_path}")
     try:
-        # Run the corresponding Python script for the algorithm
-        result = subprocess.run(
-            ["python", "dummyAlg.py", file_path],
-            capture_output=True, text=True
-        )
+        # Check if the file doesn't already have the .py extension
+        if not algorithm.endswith(".py"):
+            algorithm_file = algorithm + ".py"
+
+        # Check if the file exists in the current directory
+        if os.path.exists(algorithm_file):
+            print(f"Algorithm implementatiom for {algorithm_file} exists.")
+
+            # Extract the directory path from the filename
+            directory = os.path.dirname(file_path)
+            logging.info(f"Directory {file_path}")
+            print(f"Directory {file_path}")
+            sys.stdout.flush()  # Force the buffer to flush
+
+
+
+            # Get the current date and time as a string
+            date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+            # Create the new directory path by appending the date_time
+            new_directory = os.path.join(directory, f"out_data_{date_time}")
+            logging.info(f"new_directory {new_directory}")
+
+            # Ensure forward slashes
+            out_path = new_directory.replace('\\', '/')
+
+            print("Results will be placed at", out_path)
+            logging.info(f"Results will be placed at {out_path}")
+
+            # Check if the new directory exists, and if not, create it
+            if not os.path.exists(out_path):
+                os.makedirs(out_path)
+
+            result = subprocess.run(
+                ["python", algorithm_file, file_path, out_path],
+                capture_output=True, text=True
+            )
+
+        else:
+            print(f"Algorithm implementatiom for {algorithm_file} does not exists. running dummy")
+            # Run the corresponding Python script for the algorithm
+            algorithm_file = "alg_dummy.py"
+
+            result = subprocess.run(
+                ["python", algorithm_file, file_path],
+                capture_output=True, text=True
+            )
+
         logging.info(f"Algorithm {algorithm} executed on {file_path}, result: {result.stdout}")
         print(f"Algorithm {algorithm} executed on {file_path}, result: {result.stdout}")
         if result.stderr:

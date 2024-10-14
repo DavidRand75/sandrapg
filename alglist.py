@@ -1,6 +1,6 @@
 alglist = {
     "Alg1":"Noise filter: Band pass 50Hz-2KHz",
-    "Alg2":"Spectral Gating",
+    "alg_spectralGating":"Spectral Gating",
     "Alg3":"Wiener Filtering",
     "Alg4":"Downsampling",
     "Alg5":"Fast Fourier Transform (FFT)",
