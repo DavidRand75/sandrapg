@@ -72,7 +72,7 @@ def download_worker():
             if not os.path.exists(download_path):
                 print(f"Downloading {file} from {bucket} to {download_path}")
                 # Uncomment the following line to enable actual S3 download
-                # s3_manager.download_file(bucket, file, download_path)
+                s3_manager.download_file(bucket, file, download_path)
             else:
                 print(f"File {file} already exists, skipping download.")
                 logging.info(f"File {file} already exists, skipping download.")

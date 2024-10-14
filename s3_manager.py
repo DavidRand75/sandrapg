@@ -1,5 +1,6 @@
 import boto3
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
+import os
 
 class S3Manager:
     def __init__(self, access_key, secret_key, region):
@@ -110,4 +111,18 @@ class S3Manager:
         except ClientError as e:
             print(f"Error generating pre-signed URL: {e}")
             return None
+        
+    # Method to download a file from S3
+    def download_file(self, bucket_name, file_name, local_path=None):
+        try:
+            # If local_path is not provided, use the current working directory
+            if local_path is None:
+                local_path = os.path.join(os.getcwd(), file_name)
 
+            # Download the file from S3
+            self.s3.download_file(bucket_name, file_name, local_path)
+            print(f"File {file_name} downloaded successfully to {local_path}")
+            return True
+        except Exception as e:
+            print(f"Error downloading file {file_name} from bucket {bucket_name}: {e}")
+            return False
