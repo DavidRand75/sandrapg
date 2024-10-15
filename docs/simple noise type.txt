@@ -1,0 +1,23 @@
+The reason you can hear the addition of white noise and Gaussian noise, but not pink noise, Brownian noise, or impulse noise as clearly could be due to the characteristics of these different types of noise and how they interact with the audio signal.
+
+Here's a breakdown of why this might happen:
+White Noise:
+
+White noise has a flat frequency spectrum, meaning all frequencies are present equally. This makes it very noticeable in an audio signal because it affects both high and low frequencies equally, making it sound like a "hiss." That's why you're hearing it clearly.
+Gaussian Noise:
+
+Gaussian noise is random noise that follows a Gaussian (normal) distribution. Since it's spread out across the entire spectrum (similar to white noise), it tends to be very audible. You can hear it because it's uniformly distributed across the signal.
+Pink Noise:
+
+Pink noise has more power in lower frequencies and less in higher frequencies, following a 1/f frequency distribution. This makes it softer or more "natural" sounding compared to white noise, which could explain why it’s less noticeable. Pink noise is often used in testing and audio production because it's less harsh to the ears and blends more with natural sounds.
+Brownian Noise:
+
+Brownian noise (also known as red noise) has even more power concentrated in the lower frequencies than pink noise. It can sound like a deep rumble, but it may not be very noticeable unless you're focusing on low-frequency sounds. This might be why you're not hearing it as distinctly.
+Impulse Noise:
+
+Impulse noise consists of short bursts of energy that occur at random intervals. If the impulses are too short or too few, they may not be noticeable in a continuous audio track, especially if the audio is already complex. Impulse noise may be more noticeable in clean, quiet signals or as "clicks" in the audio.
+
+What to do next:
+Amplify the noise: You might need to increase the amplitude of the pink, Brownian, or impulse noise to make them more audible.
+Adjust parameters: For impulse noise, you can increase the number of impulses to make them more noticeable. Similarly, for pink and Brownian noise, increasing the noise level might help it stand out more.
+

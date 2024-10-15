@@ -40,7 +40,7 @@ def spectral_gating(input_file, output_dir, noise_threshold_db=-30):
     y_gated = librosa.istft(gated_stft)
 
     # Save the processed audio
-    output_wav = os.path.join(output_dir, f"processed_{os.path.basename(wav_file)}")
+    output_wav = os.path.join(output_dir, f"spectral_gating_{os.path.basename(wav_file)}")
     sf.write(output_wav, y_gated, sr)
 
     # Plot and save before and after spectrograms
