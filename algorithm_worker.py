@@ -11,6 +11,31 @@ import  sys
 logging.basicConfig(filename='algorithmworker.log', level=logging.INFO, 
                     format='%(asctime)s %(levelname)s %(message)s')
 
+
+def create_algorithm_output_directory(algorithm, directory):
+    # Get the current date and time as a string
+    date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # Create the new directory path by appending the algorithm name and date_time
+    new_directory = os.path.join(directory, f"{algorithm}_out_data_{date_time}")
+    logging.info(f"New directory path: {new_directory}")
+
+    # Ensure forward slashes (optional, usually works fine on most platforms)
+    out_path = new_directory.replace('\\', '/')
+    logging.info(f"Output path after replacement: {out_path}")
+
+    # Check if the new directory exists, and if not, create it
+    try:
+        if not os.path.exists(out_path):
+            os.makedirs(out_path)
+            logging.info(f"Directory created: {out_path}")
+        else:
+            logging.info(f"Directory already exists: {out_path}")
+    except Exception as e:
+        logging.error(f"Failed to create directory {out_path}: {e}")
+    
+    return out_path
+
 def algorithm_worker():
     print(f"This is an algorithm worker .... on PID: {os.getpid()} ready for processing")
     context = zmq.Context()
@@ -66,22 +91,11 @@ def run_algorithm(algorithm, file_path):
 
 
 
-            # Get the current date and time as a string
-            date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+            out_path = create_algorithm_output_directory(algorithm, directory)
+            print("~o"*20)
+            print(f"out path: {out_path}")
+            print("~o"*20)
 
-            # Create the new directory path by appending the date_time
-            new_directory = os.path.join(directory, f"out_data_{date_time}")
-            logging.info(f"new_directory {new_directory}")
-
-            # Ensure forward slashes
-            out_path = new_directory.replace('\\', '/')
-
-            print("Results will be placed at", out_path)
-            logging.info(f"Results will be placed at {out_path}")
-
-            # Check if the new directory exists, and if not, create it
-            if not os.path.exists(out_path):
-                os.makedirs(out_path)
 
             result = subprocess.run(
                 ["python", algorithm_file, file_path, out_path],
