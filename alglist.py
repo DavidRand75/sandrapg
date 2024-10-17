@@ -22,6 +22,7 @@ alglist = {
     "alg_audioChunks":"Audio Chunks",
     "alg_audioChunks2":"Audio Chunks",
     "alg_ExpMovingAvarage":"Exponential Moving Avarage",
+    "alg_splitAndConvert":"Split m4a Convert Wav",
     "Alg1":"Noise filter: Band pass 50Hz-2KHz",
     "Alg2":"Spectral Gating",
     "Alg3":"Wiener Filtering",
